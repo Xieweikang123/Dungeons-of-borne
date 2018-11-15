@@ -1,0 +1,30 @@
+﻿
+using UnityEngine;
+
+namespace Gameplay
+{
+    namespace Managers
+    {
+        [ DisallowMultipleComponent ]
+        class MusicManager : MonoBehaviour
+        {
+            private static MusicManager instance = null;
+            public static MusicManager Instance { get { return ( instance ); } }
+
+            private void Awake()
+            {
+                if ( instance != null && instance != this )
+                {
+                    Destroy( this.gameObject );
+                    return;
+                }
+                else
+                {
+                    instance = this;
+                }
+
+                DontDestroyOnLoad( this.gameObject );
+            }
+        }
+    }
+}
