@@ -5,6 +5,7 @@ using UnityEngine;
 
 using Data;
 using Utilities;
+using System.Collections;
 
 namespace Environment
 {
@@ -51,6 +52,8 @@ namespace Environment
 
         private void Start()
         {
+            //Debug.LogError(gameObject + "Room");
+
             roomData = GameObject.Find( "Room Manager" ).GetComponent< RoomData >();
 
             if ( this.gameObject.name != "Main Room" ) roomData.createdRooms.Add( this );
@@ -59,13 +62,37 @@ namespace Environment
             trigger.enterEvents += OnPlayerEnter;
             trigger.exitEvents  += OnPlayerExit;
         }
-
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                StopAllCoroutines();
+            }
+        }
         private void AdjustCamera()
+        {
+            Vector3 fixedPos = new Vector3(transform.position.x, transform.position.y, -10f);
+            CameraManager._instance.AdjustCamera(fixedPos);
+        }
+        /// <summary>
+        /// 摄像机移动
+        /// </summary>
+        private IEnumerator  CameraTranslate()
         {
             // Locate the camera's position to current room position.
             const float z = -10.0f;
-            Vector3 fixedPos = new Vector3( transform.position.x , transform.position.y , z );
-            Camera.main.transform.position = fixedPos;
+            Vector3 fixedPos = new Vector3(transform.position.x, transform.position.y, z);
+            // Camera.main.transform.position = fixedPos;
+
+            while (Vector3.Distance(Camera.main.transform.position, fixedPos) > 0.1f)
+            {
+                //Debug.LogError("execute");
+
+                Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, fixedPos, Time.deltaTime+0.1f);
+
+                yield return null;
+            }
+           // Debug.LogError("Coroutine End");
         }
 
         /// <summary>
@@ -202,6 +229,7 @@ namespace Environment
         private void OnPlayerEnter()
         {
             AdjustCamera();
+
 
             if ( this.gameObject.name != "Main Room" )
             {
