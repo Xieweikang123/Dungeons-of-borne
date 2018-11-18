@@ -47,6 +47,9 @@ namespace Gameplay
             [SerializeField]
             private Entity m_Entity = null;
 
+            [SerializeField]
+            private GameObject minimap_obj;
+
             #region Private Fields
 #if UNITY_STANDALONE
             /// <summary>
@@ -97,6 +100,8 @@ namespace Gameplay
                 Move();
 #if UNITY_STANDALONE
                 Attack();
+                //小地图
+                OnOffMinimap();
 #endif
             }
 
@@ -271,6 +276,11 @@ namespace Gameplay
             }
             #endregion
             #endregion
+            private void OnOffMinimap(){
+               if(Input.GetKeyDown(KeyCode.N)){
+                    minimap_obj.SetActive(!minimap_obj.activeSelf);
+                }
+            }
         }
     }
 }

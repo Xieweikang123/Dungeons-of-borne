@@ -21,7 +21,6 @@ namespace Gameplay
 
             private void Start()
             {
-                //Debug.Log("[WorldManager Start()]");
                 Invoke("SummonStair", 3.5f);
             }
 
